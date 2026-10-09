@@ -53,10 +53,17 @@
     });
   };
 
+  // Desktop pins the whole stage; phones pin only the figure inside its own track
+  const small = window.matchMedia('(max-width: 900px)');
+  const track = story && story.querySelector('[data-track]');
+  const pin = track && track.querySelector('[data-pin]');
+
   const renderStory = () => {
     if (!storyOn) return;
-    const travel = story.offsetHeight - stage.offsetHeight;
-    const p = travel > 0 ? clamp(-story.getBoundingClientRect().top / travel) : 1;
+    const [outer, inner] = small.matches && track ? [track, pin] : [story, stage];
+    const top = parseFloat(getComputedStyle(inner).top) || 0;
+    const travel = outer.offsetHeight - inner.offsetHeight;
+    const p = travel > 0 ? clamp((top - outer.getBoundingClientRect().top) / travel) : 1;
     // Hold the obstacle briefly, turn, then hold the bridge before releasing the pin
     const t = clamp((p - 0.1) / 0.72);
     placeBar(bar, t);
@@ -132,4 +139,5 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
   reduce.addEventListener('change', () => { enableStory(); reveal(); });
+  small.addEventListener('change', onScroll);
 })();

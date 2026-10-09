@@ -130,7 +130,7 @@ img, svg { display: block; }
   justify-content: space-between;
   gap: 24px;
 }
-.brand { display: block; width: 116px; color: var(--ink); }
+.brand { display: block; width: 116px; padding-block: 12px; color: var(--ink); }
 .brand:focus-visible { outline-offset: 8px; }
 
 .nav { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 36px); font-size: 15px; }
@@ -151,6 +151,7 @@ img, svg { display: block; }
 
 @media (max-width: 640px) {
   .nav .hide-sm { display: none; }
+  .nav a { padding-block: 12px; }
   .brand { width: 100px; }
 }
 
@@ -224,7 +225,7 @@ img, svg { display: block; }
 }
 :root[lang="ar"] .hero-lede { letter-spacing: 0; line-height: 1.7; }
 
-.hero-figure { grid-column: 8 / span 5; }
+.hero-track { grid-column: 8 / span 5; }
 .mark { width: 100%; height: auto; overflow: visible; }
 .mark .pier { fill: var(--ink); stroke: var(--ink); stroke-width: 6; stroke-linejoin: round; }
 .mark .bar rect { fill: var(--oxide); stroke: var(--paper); stroke-width: 7; paint-order: stroke; }
@@ -277,20 +278,31 @@ img, svg { display: block; }
 .js-story .steps li { color: var(--muted); }
 .js-story .steps li.is-active { color: var(--ink); }
 
-@media (max-width: 900px) {
-  .hero-copy, .hero-figure { grid-column: 1 / -1; }
-  .hero-figure { max-width: 460px; }
-  .js-story .story { height: 230vh; }
-  .js-story .story__stage > .wrap { row-gap: 12px; }
-  .js-story .hero-lede { margin-block: 16px 20px; }
-  .js-story .hero-figure { width: min(100%, 46vh); }
-  .js-story .steps { margin-top: 14px; }
-  .js-story .captions { margin-top: 12px; min-height: 4.8em; }
-  .js-story .captions p { font-size: 15px; }
+/* Short laptop screens: keep the pinned hero inside the viewport */
+@media (min-width: 901px) and (max-height: 760px) {
+  .hero-title { font-size: min(11vw, 19vh); }
+  .hero-lede { margin-block: 20px 28px; }
 }
-@media (max-width: 900px) and (max-height: 760px) {
-  .js-story .hero-title { font-size: clamp(52px, 9vh, 96px); }
-  .js-story .hero-lede { font-size: 17px; }
+
+/* Phones and tablets: the copy scrolls normally and only the figure pins.
+   The whole hero never fits a phone screen once Safari's bars are showing. */
+@media (max-width: 900px) {
+  .hero-copy, .hero-track { grid-column: 1 / -1; }
+  .hero-figure { max-width: 460px; }
+  .story__stage { padding-block: 40px 72px; }
+  .story__stage > .wrap { row-gap: 48px; }
+
+  .js-story .story { height: auto; }
+  .js-story .story__stage { position: static; height: auto; padding-block: 40px 24px; }
+  .js-story .hero-track { height: 200vh; }
+  .js-story .hero-figure {
+    position: sticky;
+    top: calc(var(--header) + 24px);
+    width: min(100%, 460px, 52vh);
+  }
+  .js-story .steps { margin-top: 20px; }
+  .js-story .captions { margin-top: 14px; min-height: 6.4em; }
+  .js-story .captions p { font-size: 16px; }
 }
 
 /* Sections */
@@ -513,7 +525,8 @@ img, svg { display: block; }
 .site-footer .ar-name { font-family: "Plex Arabic", sans-serif; font-size: 18px; color: var(--paper); }
 @media (max-width: 720px) {
   .site-footer .inner { grid-template-columns: 1fr; }
-  .site-footer .meta { justify-content: flex-start; }
+  .site-footer .meta { justify-content: flex-start; gap: 0 24px; }
+  .site-footer .meta > * { padding-block: 12px; }
 }
 
 /* Reveal (only when JS is on and motion is allowed) */
